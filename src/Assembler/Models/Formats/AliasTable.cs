@@ -4,12 +4,13 @@ using System.Collections.Immutable;
 
 public static class AliasTable 
 {
-    public static ImmutableDictionary<string, (string, string)> InstructionAliases{ get; }
+    public static ImmutableDictionary<string, (string Target, string Arg)> InstructionAliases{ get; }
 
     static AliasTable()
     {
-        InstructionAliases = new Dictionary<string, (string, string)>
+        InstructionAliases = new Dictionary<string, (string Target, string Arg)>
         {
+            ["hlt"] = ("hlt", "0"),
             ["exit"] = ("hlt", "1"),
 
             ["bra"] = ("bra", "11"),
