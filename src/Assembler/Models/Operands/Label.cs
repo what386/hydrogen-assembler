@@ -1,6 +1,5 @@
 namespace Assembler.Models.Operands;
 
-using Assembler.Exceptions;
 using Assembler.Utils;
 
 public class Label(string value, string? destination) : Operand(value, LENGTH, Type.LABEL)
@@ -18,7 +17,7 @@ public class Label(string value, string? destination) : Operand(value, LENGTH, T
    public override string Parse()
    {
       if (destination == null)
-         throw new InternalException("Unable to parse label with null destination!");
+         throw new ArgumentException("Unable to parse label with null destination!");
 
       int number = BaseConverter.ToInteger(destination);
       return BaseConverter.ToBinary(number, LENGTH);

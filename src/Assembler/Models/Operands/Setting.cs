@@ -2,8 +2,10 @@ namespace Assembler.Models.Operands;
 
 using Assembler.Models.Formats;
 
-public class Setting(string value) : Operand(value, 3, Type.SETTING)
+public class Setting(string value) : Operand(value, LENGTH, Type.SETTING)
 {
+   const int LENGTH = 3;
+
    public override string Parse()
    {
          if(NameTable.Settings.TryGetValue(value, out var result))

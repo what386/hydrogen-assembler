@@ -4,6 +4,8 @@ using Assembler.Models.Formats;
 
 public class Condition(string value) : Operand(value, 3, Type.CONDITION)
 {
+   const int LENGTH = 3;
+
    public override string Parse()
    {
          if(NameTable.BranchConditions.TryGetValue(value, out var result))

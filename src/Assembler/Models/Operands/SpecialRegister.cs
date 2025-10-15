@@ -2,8 +2,10 @@ namespace Assembler.Models.Operands;
 
 using Assembler.Models.Formats;
 
-public class SpecialRegister(string value) : Operand(value, 3, Type.SPECIALREG)
+public class SpecialRegister(string value) : Operand(value, LENGTH, Type.SPECIALREG)
 {
+   const int LENGTH = 3;
+
    public override string Parse()
    {
          if(NameTable.SpecialRegisters.TryGetValue(value, out var result))

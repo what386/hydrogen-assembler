@@ -12,6 +12,6 @@ public class Address(string value) : Operand(value, LENGTH, Type.ADDRESS)
          throw new ArgumentException($"Invalid prefix for address: '{value}'");
 
       int number = BaseConverter.ToInteger(base.value);
-      return BaseConverter.ToBinary(number, base.length);
+      return BaseConverter.ToBinary(number, LENGTH);
    }
 }
