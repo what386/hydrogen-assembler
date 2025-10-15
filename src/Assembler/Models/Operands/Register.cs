@@ -2,7 +2,7 @@ namespace Assembler.Models.Operands;
 
 using Assembler.Utils;
 
-public class Register(string value) : Operand(value, LENGTH)
+public class Register(string value) : Operand(value, LENGTH, Type.REGISTER)
 {
    const int LENGTH = 3;
 

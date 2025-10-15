@@ -2,7 +2,7 @@ namespace Assembler.Models.Operands;
 
 using Assembler.Utils;
 
-public class Address(string value) : Operand(value, LENGTH)
+public class Address(string value) : Operand(value, LENGTH, Type.ADDRESS)
 {
    const int LENGTH = 8;
 

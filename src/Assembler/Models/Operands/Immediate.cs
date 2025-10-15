@@ -2,9 +2,8 @@ namespace Assembler.Models.Operands;
 
 using Assembler.Utils;
 
-public class Immediate(string value, int length) : Operand(value, length)
+public class Immediate(string value, int length) : Operand(value, length, Type.IMMEDIATE)
 {
-
    protected override string Parse()
    {
       if(base.value[..1] != "!")
