@@ -3,21 +3,14 @@ namespace Assembler.Models.Operands;
 public abstract class Operand
 {
    protected string value;
-   protected int length; 
+   protected int? length; 
    protected Type type;
    
-   protected string? binary = null;
-
-   public string? Binary => binary;
-  
-   public Operand(string value, int length, Type type, bool parse = true)
+   public Operand(string value, int? length, Type type, bool parse = true)
    {
       this.value = value;
       this.length = length;
       this.type = type;
-
-      if (parse)
-         binary = Parse();
    }
 
    public enum Type{
@@ -27,9 +20,10 @@ public abstract class Operand
       ADDRESS,
       CONDITION,
       SETTING,
-      SPECIALREG
+      SPECIALREG,
+      LABEL
    }
 
-   protected abstract string Parse();
+   public abstract string Parse();
 }
 

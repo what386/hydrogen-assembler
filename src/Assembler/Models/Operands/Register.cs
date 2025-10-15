@@ -24,7 +24,7 @@ public class Register(string value) : Operand(value, LENGTH, Type.REGISTER)
       return index;
    } 
 
-   protected override string Parse()
+   public override string Parse()
    {
       if(base.value[..1].ToLower() != "r")
          throw new ArgumentException($"Argument is not a register: '{base.value}'");
