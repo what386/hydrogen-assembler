@@ -9,7 +9,7 @@ public class Address(string value) : Operand(value, LENGTH, Type.ADDRESS)
    protected override string Parse()
    {
       if(base.value[..1] != "!")
-         throw new System.ArgumentException();
+         throw new ArgumentException($"Invalid prefix for address: '{value}'");
 
       int number = BaseConverter.ToInteger(base.value);
       return BaseConverter.ToBinary(number, base.length);

@@ -9,6 +9,6 @@ public class Condition(string value, int length) : Operand(value, length, Type.C
          if(NameTable.BranchConditions.TryGetValue(value, out var result))
             return result;
 
-         throw new KeyNotFoundException();
+         throw new KeyNotFoundException($"Condition not found in format table: '{value}'");
    } 
 }

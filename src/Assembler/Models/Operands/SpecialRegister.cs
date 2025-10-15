@@ -9,6 +9,6 @@ public class SpecialRegister(string value, int length) : Operand(value, length, 
          if(NameTable.SpecialRegisters.TryGetValue(value, out var result))
             return result;
 
-         throw new KeyNotFoundException();
+         throw new KeyNotFoundException($"Special register not found in format table: '{value}'");
    }
 }

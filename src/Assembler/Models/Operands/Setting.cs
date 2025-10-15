@@ -9,6 +9,6 @@ public class Setting(string value, int length) : Operand(value, length, Type.SET
          if(NameTable.Settings.TryGetValue(value, out var result))
             return result;
 
-         throw new KeyNotFoundException();
+         throw new KeyNotFoundException($"Setting not found in format table: '{value}'");
    } 
 }
