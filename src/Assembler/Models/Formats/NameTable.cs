@@ -23,8 +23,8 @@ public static class NameTable
             ["AL"] = "111", ["TR"] = "111", // Always, True 
 
             // alternate branchConditions
-            ["VS"] = "000", // Overflow Set (V=1) - if sharing with EQ
-            ["VC"] = "001", // Overflow Clear (V=0) - if sharing with NE
+            ["VS"] = "000", // Overflow Set (V=1)
+            ["VC"] = "001", // Overflow Clear (V=0)
             ["GE"] = "010", // Greater Equal (N=V)
             ["LT"] = "011", // Less Than (N≠V)
             ["GT"] = "100", // Greater (Z=0 && N=V)
