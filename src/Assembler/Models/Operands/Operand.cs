@@ -1,20 +1,40 @@
 namespace Assembler.Models.Operands;
 
+using Utils;
+
 public abstract class Operand
 {
-   protected string value;
-   protected int length; 
-   protected Type type;
+   public string name;
+   public string value;
+   public int length; 
+   public Type type;
    
-   public Operand(string value, int length, Type type, bool parse = true)
+   private static string RemovePrefixIfExists(string value)
    {
-      this.value = value;
+      if (string.IsNullOrEmpty(value))
+         return value;
+
+      char firstChar = value[0];
+
+      // Check if first character is a known prefix
+      if ("!@r?.".Contains(firstChar))
+         return value[1..];
+
+      if (firstChar.Equals('['))
+         return value[1..^1];
+
+      return value;
+   }
+
+   public Operand(string name, int length, Type type)
+   {
+      this.name = name;
+      this.value=RemovePrefixIfExists(name);
       this.length = length;
       this.type = type;
    }
 
    public enum Type{
-      NONE,
       REGISTER,
       IMMEDIATE,
       ADDRESS,

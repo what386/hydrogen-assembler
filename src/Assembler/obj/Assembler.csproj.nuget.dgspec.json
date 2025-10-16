@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/bmorin/octet-assembler/src/Assembler/Assembler.csproj": {}
+    "/home/bmorin/source/octet-assembler/src/Assembler/Assembler.csproj": {}
   },
   "projects": {
-    "/home/bmorin/octet-assembler/src/Assembler/Assembler.csproj": {
+    "/home/bmorin/source/octet-assembler/src/Assembler/Assembler.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/bmorin/octet-assembler/src/Assembler/Assembler.csproj",
+        "projectUniqueName": "/home/bmorin/source/octet-assembler/src/Assembler/Assembler.csproj",
         "projectName": "Assembler",
-        "projectPath": "/home/bmorin/octet-assembler/src/Assembler/Assembler.csproj",
+        "projectPath": "/home/bmorin/source/octet-assembler/src/Assembler/Assembler.csproj",
         "packagesPath": "/home/bmorin/.nuget/packages/",
-        "outputPath": "/home/bmorin/octet-assembler/src/Assembler/obj/",
+        "outputPath": "/home/bmorin/source/octet-assembler/src/Assembler/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/bmorin/.nuget/NuGet/NuGet.Config"

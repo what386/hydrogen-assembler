@@ -2,9 +2,8 @@ namespace Assembler.Models;
 
 using Assembler.Models.Operands;
 
-public record Instruction(string mnemonic, Operand[] operands, string? bits)
+public record Instruction(string mnemonic, Operand[] operands)
 {
-    string mnemonic = mnemonic;
-    Operand[]? operands = operands;
-    string? typeBits = bits;
+    public string mnemonic = mnemonic;
+    public Operand[] operands = operands;
 }

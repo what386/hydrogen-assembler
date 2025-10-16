@@ -9,8 +9,13 @@ using OpType = Assembler.Models.Operands.Operand.Type;
 
 public static class Lexer
 {
+    public static Instruction[] ParseAllLines(string[] lines)
+    {
+        return lines.Select(GetInstruction).ToArray();
+    } 
+
     // inst op1, op2, op3
-    public static Instruction ParseLine(string line)
+    public static Instruction GetInstruction(string line)
     {
         string[] parts = line.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
         
@@ -19,18 +24,9 @@ public static class Lexer
             ? parts[1].Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
             : Array.Empty<string>();
        
-        var (mnemonic, bits) = HandleAlias(mnemonicString);
         Operand[] operands = GetOperands(operandStrings);
 
-        return new Instruction(mnemonic,bits,operands);
-    }
-
-    private static (string baseop, string? bits) HandleAlias(string mnemonic)
-    {
-        if(AliasTable.InstructionAliases.TryGetValue(mnemonic, out var value))
-            return value;
-
-        return (mnemonic, null);
+        return new Instruction(mnemonicString, operands);
     }
 
     private static OpType GetNamedType(string operandString)
@@ -70,27 +66,25 @@ public static class Lexer
     {
         return type switch
         {
+            // imm defaults to "0" length if not provided
             OpType.IMMEDIATE => new Immediate(value),
-            OpType.ADDRESS=> new Address(value),
-            OpType.CONDITION=> new Condition(value),
-            OpType.REGISTER=> new Register(value),
-            OpType.SETTING=> new Setting(value),
-            OpType.SPECIALREG=> new SpecialRegister(value),
+            OpType.ADDRESS => new Address(value),
+            OpType.CONDITION => new Condition(value),
+            OpType.REGISTER => new Register(value),
+            OpType.SETTING => new Setting(value),
+            OpType.SPECIALREG => new SpecialRegister(value),
             _ => throw new ArgumentException($"Invalid operand type in creation of new operand: {type}")
         };
     }
 
-    public static Operand[] GetOperands(string[] stringOperands)
+    private static Operand[] GetOperands(string[] stringOperands)
     {
         List<Operand> outputOperands = new();
         
         foreach(var operandString in stringOperands)
         {
-            string value = operandString[1..];
-
             OpType operandType = GetOperandType(operandString);
-
-            outputOperands.Add(CreateOperand(value, operandType));
+            outputOperands.Add(CreateOperand(operandString, operandType));
         }
 
         return outputOperands.ToArray();

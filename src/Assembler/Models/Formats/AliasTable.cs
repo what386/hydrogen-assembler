@@ -42,13 +42,13 @@ public static class AliasTable
             ["sbv"] = ("sub", "10"),
             ["sbvb"] = ("sub", "11"),
 
-            ["and"] = ("bit", "00"),
-            ["or"] = ("bit", "01"),
+            ["or"] = ("bit", "00"),
+            ["and"] = ("bit", "01"),
             ["xor"] = ("bit", "10"),
             ["imp"] = ("bit", "11"),
 
-            ["nand"] = ("bnt", "00"),
-            ["nor"] = ("bnt", "01"),
+            ["nor"] = ("bnt", "00"),
+            ["nand"] = ("bnt", "01"),
             ["xnor"] = ("bnt", "10"),
             ["nimp"] = ("bnt", "11"),
 

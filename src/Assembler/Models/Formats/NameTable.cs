@@ -13,48 +13,48 @@ public static class NameTable
         BranchConditions = new Dictionary<string, string>
         {
             // standard branchConditions
-            ["EQ"] = "000", // Equal (Z=1)
-            ["NE"] = "001", // Not Equal (Z=0)
-            ["CS"] = "010", ["HS"] = "010", // Carry Set / Higher Same (C=1)
-            ["CC"] = "011", ["LO"] = "010", // Carry Clear / Lower (C=0)
-            ["HI"] = "100", // Higher (C=1 && Z=0)
-            ["LS"] = "101", // Lower Same (C=0 || Z=1)
-            ["HC"] = "110", // Half Carry (H) 
-            ["AL"] = "111", ["TR"] = "111", // Always, True 
+            ["eq"] = "000", // equal (z=1)
+            ["ne"] = "001", // not equal (z=0)
+            ["cs"] = "010", ["hs"] = "010", // carry set / higher same (c=1)
+            ["cc"] = "011", ["lo"] = "010", // carry clear / lower (c=0)
+            ["hi"] = "100", // higher (c=1 && z=0)
+            ["ls"] = "101", // lower same (c=0 || z=1)
+            ["hc"] = "110", // half carry (h) 
+            ["al"] = "111", ["tr"] = "111", // always, true 
 
-            // alternate branchConditions
-            ["VS"] = "000", // Overflow Set (V=1)
-            ["VC"] = "001", // Overflow Clear (V=0)
-            ["GE"] = "010", // Greater Equal (N=V)
-            ["LT"] = "011", // Less Than (N≠V)
-            ["GT"] = "100", // Greater (Z=0 && N=V)
-            ["LE"] = "101", // Less Equal (Z=1 || N≠V)
-            ["MI"] = "110", // Minus / Negative (N=1)
-            ["PL"] = "111", // Plus / Positive (N=0)
+            // alternate branchconditions
+            ["vs"] = "000", // overflow set (v=1)
+            ["vc"] = "001", // overflow clear (v=0)
+            ["ge"] = "010", // greater equal (n=v)
+            ["lt"] = "011", // less than (n≠v)
+            ["gt"] = "100", // greater (z=0 && n=v)
+            ["le"] = "101", // less equal (z=1 || n≠v)
+            ["mi"] = "110", // minus / negative (n=1)
+            ["pl"] = "111", // plus / positive (n=0)
         }.ToImmutableDictionary();
 
         Settings = new Dictionary<string, string>
         {
-            ["ALTB"] = "000", // Alt branch conditions
-            ["AINC"] = "001", // Auto-increment mode
-            ["LSRC"] = "010", // Loop source
-            ["LCNT"] = "011", // Loop count
-            ["PGSW"] = "100", // Memory page swap
-            ["PGJM"] = "101", // Page Jump mode
-            ["IMSK"] = "110", // Interrupt mask
-            ["INTR"] = "111", // Call interrupt
+            ["altb"] = "000", // alt branch conditions
+            ["ainc"] = "001", // auto-increment mode
+            ["lsrc"] = "010", // loop source
+            ["lcnt"] = "011", // loop count
+            ["pgsw"] = "100", // memory page swap
+            ["pgjm"] = "101", // page jump mode
+            ["imsk"] = "110", // interrupt mask
+            ["intr"] = "111", // call interrupt
         }.ToImmutableDictionary();
         
         SpecialRegisters = new Dictionary<string, string>
         {
-            ["AP"] = "000", // Address Pointer
-            ["SP"] = "001", // Stack Pointer
-            ["SW"] = "010", // Status Word
-            ["CW"] = "011", // Control Word 
-            ["LP"] = "100", // Loop Pointer
-            ["BO"] = "101", // Branch Offset
-            ["PCL"] = "110", // Program Counter Low
-            ["PCH"] = "111", // Program Counter High
+            ["ap"] = "000", // address pointer
+            ["sp"] = "001", // stack pointer
+            ["sw"] = "010", // status word
+            ["cw"] = "011", // control word 
+            ["lp"] = "100", // loop pointer
+            ["bo"] = "101", // branch offset
+            ["pcl"] = "110", // program counter low
+            ["pch"] = "111", // program counter high
         }.ToImmutableDictionary();
     }
 

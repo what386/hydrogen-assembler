@@ -47,6 +47,6 @@ public static class BaseConverter
         
         string binary = Convert.ToString(value, 2).PadLeft(length, '0');
         
-        return $"0b{binary}";
+        return binary;
     }
 }

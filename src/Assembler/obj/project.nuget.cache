@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "EAXXg2sQB+U=",
+  "dgSpecHash": "rFoDsklpWZk=",
   "success": true,
-  "projectFilePath": "/home/bmorin/octet-assembler/src/Assembler/Assembler.csproj",
+  "projectFilePath": "/home/bmorin/source/octet-assembler/src/Assembler/Assembler.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

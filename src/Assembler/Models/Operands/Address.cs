@@ -2,16 +2,17 @@ namespace Assembler.Models.Operands;
 
 using Assembler.Utils;
 
-public class Address(string value) : Operand(value, LENGTH, Type.ADDRESS)
+public class Address(string name) : Operand(name, LENGTH, Type.ADDRESS)
 {
    const int LENGTH = 8;
 
    public override string Parse()
    {
-      if(base.value[..1] != "!")
-         throw new ArgumentException($"Invalid prefix for address: '{value}'");
+      int number = BaseConverter.ToInteger(value);
+         
+      if(number > ((1 << LENGTH) - 1))
+         throw new ArgumentException();
 
-      int number = BaseConverter.ToInteger(base.value);
-      return BaseConverter.ToBinary(number, LENGTH);
+      return BaseConverter.ToBinary(number, base.length);
    }
 }
