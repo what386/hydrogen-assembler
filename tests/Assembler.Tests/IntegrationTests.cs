@@ -14,8 +14,11 @@ public class IntegrationTests
     [InlineData("jmp !2047",        "0010011111111111")] // 11-bit immediate
     public void FullAssembly_ValidInstruction_ProducesCorrectBinary(string source, string expected)
     {
-        var instruction = Lexer.GetInstruction(source);
-        string binary = Parser.ParseInstruction(instruction);
+        Lexer lexer = new();
+        Parser parser = new();
+
+        var instruction = lexer.GetInstruction(source);
+        string binary = parser.ParseInstruction(instruction);
         
         Assert.Equal(expected, binary);
     }

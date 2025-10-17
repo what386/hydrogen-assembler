@@ -10,6 +10,8 @@ public class ParserTests
     [Fact]
     public void ParseInstruction_SimpleAdd_ReturnsCorrectBinary()
     {
+        Parser parser = new();
+
         var instruction = new Instruction(
             "add",
             new Operand[]
@@ -20,7 +22,7 @@ public class ParserTests
             }
         );
         
-        string binary = Parser.ParseInstruction(instruction);
+        string binary = parser.ParseInstruction(instruction);
         
         Assert.Equal(16, binary.Length); // 5-bit opcode + 11-bit operands
         Assert.StartsWith("11000", binary); // ADD opcode
@@ -29,14 +31,19 @@ public class ParserTests
     [Fact]
     public void ParseInstruction_UnknownMnemonic_ThrowsArgumentException()
     {
+        Parser parser = new();
+
         var instruction = new Instruction("invalid", Array.Empty<Operand>());
         
-        Assert.Throws<ArgumentException>(() => Parser.ParseInstruction(instruction));
+        Assert.Throws<ArgumentException>(() => parser.ParseInstruction(instruction));
     }
     
     [Fact]
     public void ParseInstruction_OperandLengthMismatch_ThrowsArgumentException()
     {
+        Parser parser = new();
+
+
         var instruction = new Instruction(
             "ldi",
             new Operand[]
@@ -46,6 +53,6 @@ public class ParserTests
             }
         );
 
-        Assert.Throws<ArgumentException>(() => Parser.ParseInstruction(instruction));
+        Assert.Throws<ArgumentException>(() => parser.ParseInstruction(instruction));
     }
 }

@@ -1,6 +1,5 @@
 using Xunit;
 using Assembler.Core;
-using Assembler.Models.Operands;
 
 namespace Assembler.Tests;
 
@@ -9,13 +8,11 @@ public class LexerTests
     [Fact]
     public void ParseLine_SimpleInstruction_ReturnsCorrectMnemonic()
     {
-        // Arrange
+        Lexer lexer = new();
+
         string line = "add r1, r2, r3";
+        var instruction = lexer.GetInstruction(line);
         
-        // Act
-        var instruction = Lexer.GetInstruction(line);
-        
-        // Assert
         Assert.Equal("add", instruction.mnemonic);
         Assert.Equal(3, instruction.operands.Length);
     }
@@ -23,13 +20,11 @@ public class LexerTests
     [Fact]
     public void ParseLine_NoOperands_ReturnsEmptyOperandArray()
     {
-        // Arrange
+        Lexer lexer = new Lexer();
+
         string line = "nop";
+        var instruction = lexer.GetInstruction(line);
         
-        // Act
-        var instruction = Lexer.GetInstruction(line);
-        
-        // Assert
         Assert.Equal("nop", instruction.mnemonic);
         Assert.Empty(instruction.operands);
     }
