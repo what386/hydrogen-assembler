@@ -1,18 +1,3 @@
-/*
-    #define VAR value // value definition
-    #undef VAR // undefine a value
-
-    #include "file.asm" // add file source
-
-    #ifdef // if defined
-    #ifndef // if not defined
-
-    #if // conditional
-    #else // else..
-    #elif // else if
-    #end // end statement
-*/
-
 namespace Assembler.Core;
 
 using System.Text.RegularExpressions;
@@ -28,18 +13,16 @@ public class Preprocessor
     private HashSet<string> includedFiles = new();
     private List<string[]> pendingIncludes = new(); 
     
-    public string[] PreprocessFile(string filePath)
+    public string[] PreprocessFile(string[] lines, string includedir)
     {
-        var lines = File.ReadAllLines(filePath);
-        
         lines = RemoveComments(lines);
-        lines = ProcessDirectives(lines, Path.GetDirectoryName(filePath));
+        lines = ProcessDirectives(lines, includedir);
         lines = AppendIncludes(lines);
         lines = ProcessLabels(lines);
         lines = AlignPages(lines);
         
         return lines;
-    }    
+    }
    
     private string[] RemoveComments(string[] lines)
     {
