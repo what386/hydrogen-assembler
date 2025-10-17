@@ -7,16 +7,25 @@ using Assembler.Models.Operands;
 using OpType = Assembler.Models.Operands.Operand.Type;
 
 
-public static class Lexer
+public class Lexer
 {
-    public static Instruction[] ParseAllLines(string[] lines)
+    public Instruction[] ParseAllLines(string[] lines)
     {
-        return lines.Select(GetInstruction).ToArray();
+        var instructions = new Instruction[lines.Length];
+        for (int i = 0; i < lines.Length; i++)
+        {
+            instructions[i] = GetInstruction(lines[i]);
+        }
+        return instructions;
     } 
 
     // inst op1, op2, op3
-    public static Instruction GetInstruction(string line)
+    public Instruction GetInstruction(string line)
     {
+        // Add validation
+        if (string.IsNullOrWhiteSpace(line))
+            throw new ArgumentException("Cannot parse empty line");
+
         string[] parts = line.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
         
         string mnemonicString = parts[0];
@@ -29,11 +38,11 @@ public static class Lexer
         return new Instruction(mnemonicString, operands);
     }
 
-    private static OpType GetNamedType(string operandString)
+    private OpType GetNamedType(string operandString)
     {
-        if (operandString.Length < 3 || operandString[0] != '[' || operandString[^1] != ']')
+        if (operandString.Length <= 2 || operandString[0] != '[' || operandString[^1] != ']')
         throw new ArgumentException($"Malformed named operand: {operandString}");
-
+        
         string value = operandString[1..^1];
 
         if (NameTable.Settings.ContainsKey(value))
@@ -44,7 +53,7 @@ public static class Lexer
             throw new ArgumentException();
     }
 
-    private static OpType GetOperandType(string operandString)
+    private OpType GetOperandType(string operandString)
     {
         char prefix = operandString[0];
 
@@ -54,7 +63,6 @@ public static class Lexer
             'r' => OpType.REGISTER,
             '!' => OpType.IMMEDIATE,
             '?' => OpType.CONDITION,
-            '.' => OpType.LABEL,
             '[' => GetNamedType(operandString),
             _ => throw new ArgumentException($"Malformed operand: {operandString}")
         };
@@ -62,7 +70,7 @@ public static class Lexer
         return expectedType;
     }
 
-    private static Operand CreateOperand(string value, OpType type)
+    private Operand CreateOperand(string value, OpType type)
     {
         return type switch
         {
@@ -77,16 +85,14 @@ public static class Lexer
         };
     }
 
-    private static Operand[] GetOperands(string[] stringOperands)
+    private Operand[] GetOperands(string[] stringOperands)
     {
-        List<Operand> outputOperands = new();
-        
-        foreach(var operandString in stringOperands)
+        var operands = new Operand[stringOperands.Length];
+        for (int i = 0; i < stringOperands.Length; i++)
         {
-            OpType operandType = GetOperandType(operandString);
-            outputOperands.Add(CreateOperand(operandString, operandType));
+            OpType operandType = GetOperandType(stringOperands[i]);
+            operands[i] = CreateOperand(stringOperands[i], operandType);
         }
-
-        return outputOperands.ToArray();
+        return operands;
     }
 }

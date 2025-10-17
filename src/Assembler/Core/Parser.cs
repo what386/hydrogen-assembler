@@ -1,11 +1,14 @@
 namespace Assembler.Core;
+
+using System.Text;
+
 using Assembler.Models;
 using Assembler.Models.Operands;
 using Assembler.Models.Formats;
 
-public static class Parser
+public class Parser
 {
-    public static string ParseInstruction(Instruction instruction)
+    public string ParseInstruction(Instruction instruction)
     {
         string alias = instruction.mnemonic;
         Operand[] operands = instruction.operands;
@@ -13,22 +16,28 @@ public static class Parser
         var (mnemonic, typeBits) = GetInstructionAlias(alias);
         InstructionFormat format = GetInstructionFormat(mnemonic);
         
-        SetOperandLengths(operands, format);
-        string[] operandBinaries = ParseOperandsToBinary(operands, format);
+        int[] operandLengths = format.GetOperandLengths();
+
+        if (operands.Length != operandLengths.Length)
+            throw new ArgumentException(
+                $"Instruction '{mnemonic}' expects {operandLengths.Length} operands, got {operands.Length}");
+
+        SetOperandLengths(operands, operandLengths);
+        string[] operandBinaries = ParseOperandsToBinary(operands, operandLengths);
         ValidateTypeBits(typeBits, format);
         
         return AssembleBinaryInstruction(format, operandBinaries, typeBits);
     }
 
-    private static (string mnemonic, string? typeBits) GetInstructionAlias(string alias)
+    private (string mnemonic, string? typeBits) GetInstructionAlias(string alias)
     {
-        if (!AliasTable.InstructionAliases.ContainsKey(alias))
-            return (alias, null);
+        if (AliasTable.InstructionAliases.TryGetValue(alias, out var result))
+            return result;
         
-        return AliasTable.InstructionAliases[alias];
-    }
+        return (alias, null);
+    } 
 
-    private static InstructionFormat GetInstructionFormat(string mnemonic)
+    private InstructionFormat GetInstructionFormat(string mnemonic)
     {
         if (!InstructionTable.Formats.ContainsKey(mnemonic))
             throw new ArgumentException($"Unknown instruction: {mnemonic}");
@@ -36,10 +45,11 @@ public static class Parser
         return InstructionTable.Formats[mnemonic];
     }
 
-    private static void SetOperandLengths(Operand[] operands, InstructionFormat format)
+    private void SetOperandLengths(Operand[] operands, int[] operandLengths)
     {
-        int[] operandLengths = format.GetOperandLengths();
-        
+        if(operandLengths.Length != operands.Length)
+            throw new ArgumentException($"Invalid operandlengths ({operandLengths.Length}) for operands: ({operands.Length})");
+
         for (int i = 0; i < operands.Length; i++)
         {
             if (operands[i].type == Operand.Type.IMMEDIATE)
@@ -47,9 +57,8 @@ public static class Parser
         }
     }
 
-    private static string[] ParseOperandsToBinary(Operand[] operands, InstructionFormat format)
+    private string[] ParseOperandsToBinary(Operand[] operands, int[] operandLengths)
     {
-        int[] operandLengths = format.GetOperandLengths();
         string[] operandBinaries = new string[operands.Length];
         
         for (int i = 0; i < operands.Length; i++)
@@ -64,7 +73,7 @@ public static class Parser
         return operandBinaries;
     }
 
-    private static void ValidateTypeBits(string? typeBits, InstructionFormat format)
+    private void ValidateTypeBits(string? typeBits, InstructionFormat format)
     {
         if (typeBits == null)
             return;
@@ -76,40 +85,47 @@ public static class Parser
                 $"Type bits length mismatch: expected {typeBitsLength} bits, got {typeBits.Length} bits");
     }
 
-    private static string AssembleBinaryInstruction(InstructionFormat format, string[] operandBinaries, string? typeBits)
+    private string AssembleBinaryInstruction(InstructionFormat format, string[] operandBinaries, string? typeBits)
     {
-        string binary = format.opcode;
+        var binary = new StringBuilder(format.opcode);
         
         foreach (var segment in format.maskSegments)
         {
-            if (segment.Length >= 2 && char.IsLetter(segment[0]))
+            // Handle literal segments
+            if (!char.IsLetter(segment[0]))
             {
-                char marker = segment[0];
-                
-                if (marker == 'T')
-                {
-                    binary += typeBits ?? throw new ArgumentException("Type bits required but not provided");
-                }
-                else if (marker == 'X' || marker == 'Y' || marker == 'Z')
-                {
-                    int operandIndex = GetOperandIndex(marker);
+                binary.Append(segment);
+                continue;
+            }
+
+            // Handle marker segments
+            char marker = segment[0];
+            switch (marker)
+            {
+                case 'T':
+                    if (typeBits == null)
+                        throw new ArgumentException("Type bits required but not provided");
+                    binary.Append(typeBits);
+                    break;
                     
+                case 'X':
+                case 'Y':
+                case 'Z':
+                    int operandIndex = GetOperandIndex(marker);
                     if (operandIndex >= operandBinaries.Length)
                         throw new ArgumentException($"Operand {marker} referenced but not provided");
+                    binary.Append(operandBinaries[operandIndex]);
+                    break;
                     
-                    binary += operandBinaries[operandIndex];
-                }
-            }
-            else
-            {
-                binary += segment;
-            }
+                default:
+                    throw new ArgumentException($"Invalid segment marker: {marker}");
+            } 
         }
         
-        return binary;
+        return binary.ToString();
     }
 
-    private static int GetOperandIndex(char marker)
+    private int GetOperandIndex(char marker)
     {
         return marker switch
         {
@@ -120,7 +136,7 @@ public static class Parser
         };
     }
 
-    private static int GetTypeBitsLength(string[] maskSegments)
+    private int GetTypeBitsLength(string[] maskSegments)
     {
         foreach (var segment in maskSegments)
         {
@@ -130,12 +146,5 @@ public static class Parser
             }
         }
         return 0;
-    }
-
-    private static (string baseop, string? bits) HandleAlias(string mnemonic)
-    {
-        if (AliasTable.InstructionAliases.TryGetValue(mnemonic, out var value))
-            return value;
-        return (mnemonic, null);
     }
 }
