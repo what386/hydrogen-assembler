@@ -16,6 +16,7 @@ public class DirectiveFactory
         { "ifndef", (context, operand) => new Ifndef(context, operand) },
         { "else", (context, operand) => new Else(context) },
         { "endif", (context, operand) => new Endif(context) },
+        { "end", (context, operand) => new End(context) }, // does nothing
 
         // definitions
         { "define", (context, operand) => new Define(context, operand) },
@@ -27,7 +28,7 @@ public class DirectiveFactory
     public static Directive Create(PreprocessorContext context, string line)
     {
         if (!line.StartsWith("#"))
-            throw new InternalException("Attempted to create directive from unknown line");
+            throw new AssemblerException("Attempted to create directive from unknown line");
         
         string directiveName = ExtractDirectiveName(line);
         string operand = ExtractOperands(line, directiveName);
