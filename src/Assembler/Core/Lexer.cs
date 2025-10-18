@@ -10,14 +10,14 @@ using OpType = Assembler.Models.Operands.Operand.Type;
 
 public class Lexer
 {
-    public Instruction[] ParseAllLines(string[] lines)
+    public Instruction[] GetInstructions(string[] lines)
     {
         var instructions = new Instruction[lines.Length];
         for (int i = 0; i < lines.Length; i++)
         {
             try
             {
-                instructions[i] = ParseInstruction(lines[i]);
+                instructions[i] = ParseLine(lines[i]);
             }
             catch (SyntaxException ex)
             {
@@ -28,7 +28,7 @@ public class Lexer
     }
 
     // inst op1, op2, op3
-    public Instruction ParseInstruction(string line)
+    public Instruction ParseLine(string line)
     {
         // Add validation
         if (string.IsNullOrWhiteSpace(line))

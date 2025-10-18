@@ -1,7 +1,7 @@
 namespace Assembler.Core;
 
 using System.Text.RegularExpressions;
-using Models.Directives;
+using Assembler.Models.Directives;
 
 using Assembler.Exceptions;
 
@@ -11,7 +11,7 @@ public class Preprocessor
 
     private bool IsActive => context.ConditionStack.Count == 0 || context.ConditionStack.Peek();
 
-    public string[] PreprocessFile(string[] lines, string includeDir)
+    public string[] PreprocessLines(string[] lines, string includeDir)
     {
         lines = ProcessDirectives(lines, includeDir);
         lines = AppendIncludes(lines);
