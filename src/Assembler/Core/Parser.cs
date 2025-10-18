@@ -40,6 +40,12 @@ public class Parser
         if (operands.Length != operandLengths.Length)
             throw new SemanticException($"Instruction '{mnemonic}' expects {operandLengths.Length} operands, got {operands.Length}");
 
+        for (int i = 0; i < operands.Length; i++)
+        {
+            if (operands[i].type != format.operandTypes[i])
+                throw new SemanticException($"Instruction '{mnemonic}' recieved incorrect operand in position {i}: {operands[i]}");
+        }
+
         SetOperandLengths(operands, operandLengths);
         string[] operandBinaries = ParseOperandsToBinary(operands, operandLengths);
         ValidateTypeBits(typeBits, format);

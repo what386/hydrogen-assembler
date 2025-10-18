@@ -17,7 +17,7 @@ public class Lexer
         {
             try
             {
-                instructions[i] = ParseLine(lines[i]);
+                instructions[i] = GetInstruction(lines[i]);
             }
             catch (SyntaxException ex)
             {
@@ -28,7 +28,7 @@ public class Lexer
     }
 
     // inst op1, op2, op3
-    public Instruction ParseLine(string line)
+    public Instruction GetInstruction(string line)
     {
         // Add validation
         if (string.IsNullOrWhiteSpace(line))
