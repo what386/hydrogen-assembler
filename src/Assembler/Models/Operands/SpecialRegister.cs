@@ -1,6 +1,7 @@
 namespace Assembler.Models.Operands;
 
 using Assembler.Models.Formats;
+using Assembler.Exceptions;
 
 public class SpecialRegister(string name) : Operand(name, LENGTH, Type.SPECIALREG)
 {
@@ -11,6 +12,6 @@ public class SpecialRegister(string name) : Operand(name, LENGTH, Type.SPECIALRE
          if(NameTable.SpecialRegisters.TryGetValue(base.value, out var result))
             return result;
 
-         throw new KeyNotFoundException($"Special register not found in format table: '{base.value}'");
+         throw new SemanticException($"Special register not found in format table: '{base.value}'");
    }
 }

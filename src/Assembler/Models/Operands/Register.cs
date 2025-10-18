@@ -1,6 +1,7 @@
 namespace Assembler.Models.Operands;
 
 using Assembler.Utils;
+using Assembler.Exceptions;
 
 public class Register(string value) : Operand(value, LENGTH, Type.REGISTER)
 {
@@ -9,12 +10,12 @@ public class Register(string value) : Operand(value, LENGTH, Type.REGISTER)
    private int GetIndex(string register)
    {
       if(!int.TryParse(register, out int index))
-         throw new ArgumentException($"Invalid register index: '{register}'");
+         throw new SemanticException($"Invalid register index: '{register}'");
 
       int maxIndex = (1 << LENGTH) - 1; // 2^length-1
 
       if(index < 0 || index > maxIndex)
-         throw new ArgumentOutOfRangeException($"Register index '{index}' is out of range.");
+         throw new SemanticException($"Register index '{index}' is out of range.");
 
       return index;
    } 
