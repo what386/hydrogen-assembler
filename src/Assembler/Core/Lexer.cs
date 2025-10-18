@@ -40,6 +40,12 @@ public class Lexer
         string[] operandStrings = parts.Length > 1 
             ? parts[1].Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
             : Array.Empty<string>();
+
+        foreach (var operand in operandStrings)
+        {
+            if (operand.Contains(' '))
+                throw new SyntaxException($"Operands must be separated by commas. Found space in operand: '{operand}'");
+        }
        
         Operand[] operands = GetOperands(operandStrings);
 
@@ -49,7 +55,7 @@ public class Lexer
     private OpType GetNamedType(string operandString)
     {
         if (operandString.Length <= 2 || operandString[0] != '[' || operandString[^1] != ']')
-        throw new SyntaxException($"Malformed named operand '{operandString}'"); 
+            throw new SyntaxException($"Malformed named operand '{operandString}'"); 
         
         string value = operandString[1..^1];
 
