@@ -6,12 +6,16 @@ namespace Assembler.Exceptions;
 public class DirectiveException : AssemblyException
 {
     public int LineNumber { get; }
-    public string Line { get; }
+    public string? Line { get; }
 
-    public DirectiveException(string message, string line = "unknown", int lineNumber = -1)
+    public DirectiveException(string message, string line, int lineNumber)
         : base($"Directive error at line {lineNumber}: {message} ({line})")
     {
         LineNumber = lineNumber;
         Line = line;
     } 
+
+    public DirectiveException(string message) : base(message)
+    {
+    }
 }

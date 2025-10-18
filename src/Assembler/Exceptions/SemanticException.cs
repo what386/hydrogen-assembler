@@ -6,12 +6,16 @@ namespace Assembler.Exceptions;
 public class SemanticException : AssemblyException
 {
     public int LineNumber { get; }
-    public string Line { get; }
+    public string? Line { get; }
 
-    public SemanticException(string message, string line = "unknown", int lineNumber = -1)
+    public SemanticException(string message, string line, int lineNumber)
         : base($"Semantic error at line {lineNumber}: {message} ({line})")
     {
         LineNumber = lineNumber;
         Line = line;
     } 
+
+    public SemanticException(string message) : base(message)
+    {
+    }
 }

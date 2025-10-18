@@ -6,12 +6,16 @@ namespace Assembler.Exceptions;
 public class SyntaxException : AssemblyException
 {
     public int LineNumber { get; }
-    public string Line { get; }
+    public string? Line { get; }
     
-    public SyntaxException(string message, string line = "unknown", int lineNumber = -1)
+    public SyntaxException(string message, string line, int lineNumber)
         : base($"Syntax error at line {lineNumber}: {message} ({line})")
     {
         LineNumber = lineNumber;
         Line = line;
+    }
+
+    public SyntaxException(string message) : base(message)
+    {
     }
 }
