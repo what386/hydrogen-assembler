@@ -3,6 +3,8 @@ namespace Assembler.Core;
 using System.Text.RegularExpressions;
 using Models.Directives;
 
+using Assembler.Exceptions;
+
 public class Preprocessor
 {
     PreprocessorContext context = new();
@@ -20,8 +22,10 @@ public class Preprocessor
     {
         var result = new List<string>();
         
-        foreach (var line in lines)
+        for (int i = 0; i < lines.Length; i++)
         {
+            string line = lines[i];
+
             if (!line.StartsWith("#"))
             {
                 if (IsActive)
@@ -30,12 +34,17 @@ public class Preprocessor
                 }
                 continue;
             }
-            
-            Directive directive = DirectiveFactory.Create(context, line);
-            
-            if (IsActive || directive.ignoresActive)
+
+            try
             {
-                directive.Execute();
+                Directive directive = DirectiveFactory.Create(context, line);
+
+                if (IsActive || directive.ignoresActive)
+                    directive.Execute();
+            }
+            catch (DirectiveException ex)
+            {
+                throw new DirectiveException(ex.Message, line, i);
             }
         }
         

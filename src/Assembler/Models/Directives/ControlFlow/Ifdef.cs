@@ -1,6 +1,6 @@
 namespace Assembler.Models.Directives.ControlFlow;
 
-public class Ifdef : CFDirective
+public class Ifdef : Directive
 {
     string operand;
 

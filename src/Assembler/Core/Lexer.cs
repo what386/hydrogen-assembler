@@ -1,6 +1,7 @@
 namespace Assembler.Core;
 
-// e.g. tokenizer
+using Assembler.Exceptions;
+
 using Assembler.Models;
 using Assembler.Models.Formats;
 using Assembler.Models.Operands;
@@ -14,17 +15,24 @@ public class Lexer
         var instructions = new Instruction[lines.Length];
         for (int i = 0; i < lines.Length; i++)
         {
-            instructions[i] = GetInstruction(lines[i]);
+            try
+            {
+                instructions[i] = ParseInstruction(lines[i]);
+            }
+            catch (SyntaxException ex)
+            {
+                throw new SyntaxException(ex.Message, lines[i], i);
+            }
         }
         return instructions;
-    } 
+    }
 
     // inst op1, op2, op3
-    public Instruction GetInstruction(string line)
+    public Instruction ParseInstruction(string line)
     {
         // Add validation
         if (string.IsNullOrWhiteSpace(line))
-            throw new ArgumentException("Cannot parse empty line");
+            throw new AssemblerException("Lexer attempted to parse empty line");
 
         string[] parts = line.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
         
@@ -41,7 +49,7 @@ public class Lexer
     private OpType GetNamedType(string operandString)
     {
         if (operandString.Length <= 2 || operandString[0] != '[' || operandString[^1] != ']')
-        throw new ArgumentException($"Malformed named operand: {operandString}");
+        throw new SyntaxException($"Malformed named operand '{operandString}'"); 
         
         string value = operandString[1..^1];
 
@@ -50,7 +58,7 @@ public class Lexer
         else if (NameTable.SpecialRegisters.ContainsKey(value))
             return OpType.SPECIALREG;
         else
-            throw new ArgumentException();
+            throw new SyntaxException($"Invalid named operand '{operandString}'");
     }
 
     private OpType GetOperandType(string operandString)
@@ -64,7 +72,7 @@ public class Lexer
             '!' => OpType.IMMEDIATE,
             '?' => OpType.CONDITION,
             '[' => GetNamedType(operandString),
-            _ => throw new ArgumentException($"Malformed operand: {operandString}")
+            _ => throw new SyntaxException($"Missing operand prefix for operand '{operandString}'") 
         };
 
         return expectedType;
@@ -81,7 +89,7 @@ public class Lexer
             OpType.REGISTER => new Register(value),
             OpType.SETTING => new Setting(value),
             OpType.SPECIALREG => new SpecialRegister(value),
-            _ => throw new ArgumentException($"Invalid operand type in creation of new operand: {type}")
+            _ => throw new AssemblerException($"Invalid operand type in creation of new operand: {type}")
         };
     }
 

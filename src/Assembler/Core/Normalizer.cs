@@ -1,5 +1,8 @@
 namespace Assembler.Core;
+
 using System.Text.RegularExpressions;
+
+using Assembler.Exceptions;
 
 public class Normalizer
 {
@@ -87,7 +90,7 @@ public class Normalizer
         const int PageSize = 64;
         
         if (lines.Length == 0 || !lines[0].StartsWith("PAGE0"))
-            throw new InvalidOperationException("Program must begin with PAGE0:");
+            throw new FormatException("Program must begin with PAGE0:");
         
         var result = new List<string>();
         int currentPageLine = 0;
@@ -100,7 +103,7 @@ public class Normalizer
                 if (currentPageLine > 0)
                 {
                     if (currentPageLine > PageSize)
-                        throw new InvalidOperationException($"{currentPageName} exceeds {PageSize} instructions.");
+                        throw new FormatException($"{currentPageName} exceeds {PageSize} instructions.");
                     
                     while (currentPageLine % PageSize != 0)
                     {
@@ -119,7 +122,7 @@ public class Normalizer
         }
         
         if (currentPageLine > PageSize)
-            throw new InvalidOperationException($"{currentPageName} exceeds {PageSize} instructions.");
+            throw new FormatException($"{currentPageName} exceeds {PageSize} instructions.");
         
         return result.ToArray();
     }

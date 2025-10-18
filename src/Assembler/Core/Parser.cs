@@ -6,8 +6,27 @@ using Assembler.Models;
 using Assembler.Models.Operands;
 using Assembler.Models.Formats;
 
+using Assembler.Exceptions;
+
 public class Parser
 {
+    public string[] ParseInstructions(Instruction[] instructions)
+    {
+        var binary = new string[instructions.Length];
+        for (int i = 0; i < instructions.Length; i++)
+        {
+            try
+            {
+                binary[i] = ParseInstruction(instructions[i]);
+            }
+            catch (SemanticException ex)
+            {
+                throw new SemanticException(ex.Message, instructions[i].ToString(), i);
+            }
+        }
+        return binary;
+    }
+
     public string ParseInstruction(Instruction instruction)
     {
         string alias = instruction.mnemonic;
@@ -19,8 +38,7 @@ public class Parser
         int[] operandLengths = format.GetOperandLengths();
 
         if (operands.Length != operandLengths.Length)
-            throw new ArgumentException(
-                $"Instruction '{mnemonic}' expects {operandLengths.Length} operands, got {operands.Length}");
+            throw new SemanticException($"Instruction '{mnemonic}' expects {operandLengths.Length} operands, got {operands.Length}");
 
         SetOperandLengths(operands, operandLengths);
         string[] operandBinaries = ParseOperandsToBinary(operands, operandLengths);
@@ -40,7 +58,7 @@ public class Parser
     private InstructionFormat GetInstructionFormat(string mnemonic)
     {
         if (!InstructionTable.Formats.ContainsKey(mnemonic))
-            throw new ArgumentException($"Unknown instruction: {mnemonic}");
+            throw new SemanticException($"Unknown instruction: {mnemonic}");
         
         return InstructionTable.Formats[mnemonic];
     }
@@ -48,7 +66,7 @@ public class Parser
     private void SetOperandLengths(Operand[] operands, int[] operandLengths)
     {
         if(operandLengths.Length != operands.Length)
-            throw new ArgumentException($"Invalid operandlengths ({operandLengths.Length}) for operands: ({operands.Length})");
+            throw new SemanticException($"Invalid operandlengths ({operandLengths.Length}) for operands: ({operands.Length})");
 
         for (int i = 0; i < operands.Length; i++)
         {
@@ -66,8 +84,8 @@ public class Parser
             operandBinaries[i] = operands[i].Parse();
             
             if (operandBinaries[i].Length != operandLengths[i])
-                throw new ArgumentException(
-                    $"Operand {i} length mismatch: expected {operandLengths[i]} bits, got {operandBinaries[i].Length} bits ({operandBinaries[i]})");
+                throw new SemanticException(
+                    $"Operand {i} expected {operandLengths[i]} bits, got {operandBinaries[i].Length} bits ({operandBinaries[i]})");
         }
         
         return operandBinaries;
@@ -81,7 +99,7 @@ public class Parser
         int typeBitsLength = GetTypeBitsLength(format.maskSegments);
         
         if (typeBits.Length != typeBitsLength)
-            throw new ArgumentException(
+            throw new SemanticException(
                 $"Type bits length mismatch: expected {typeBitsLength} bits, got {typeBits.Length} bits");
     }
 
@@ -104,7 +122,7 @@ public class Parser
             {
                 case 'T':
                     if (typeBits == null)
-                        throw new ArgumentException("Type bits required but not provided");
+                        throw new AssemblerException($"Type bits required but not provided: {segment}");
                     binary.Append(typeBits);
                     break;
                     
@@ -113,12 +131,13 @@ public class Parser
                 case 'Z':
                     int operandIndex = GetOperandIndex(marker);
                     if (operandIndex >= operandBinaries.Length)
-                        throw new ArgumentException($"Operand {marker} referenced but not provided");
+                        throw new SemanticException($"Operand {marker} referenced but not provided");
+
                     binary.Append(operandBinaries[operandIndex]);
                     break;
                     
                 default:
-                    throw new ArgumentException($"Invalid segment marker: {marker}");
+                    throw new AssemblerException($"Invalid segment marker: {marker}");
             } 
         }
         
@@ -132,7 +151,7 @@ public class Parser
             'X' => 0,
             'Y' => 1,
             'Z' => 2,
-            _ => throw new ArgumentException($"Invalid operand marker: {marker}")
+            _ => throw new AssemblerException($"Invalid operand marker: {marker}")
         };
     }
 

@@ -4,6 +4,8 @@ using Assembler.Models.Directives.ControlFlow;
 using Assembler.Models.Directives.Definitions;
 using Assembler.Models.Directives.Transforms;
 
+using Assembler.Exceptions;
+
 public class DirectiveFactory
 {
     private static readonly Dictionary<string, Func<PreprocessorContext, string, Directive>> directiveMap = new()
@@ -25,13 +27,13 @@ public class DirectiveFactory
     public static Directive Create(PreprocessorContext context, string line)
     {
         if (!line.StartsWith("#"))
-            throw new ArgumentException("Not a directive");
+            throw new InternalException("Attempted to create directive from unknown line");
         
         string directiveName = ExtractDirectiveName(line);
         string operand = ExtractOperands(line, directiveName);
         
         if (!directiveMap.TryGetValue(directiveName, out var factory))
-            throw new ArgumentException($"Unknown directive: #{directiveName}");
+            throw new DirectiveException($"Unknown directive: #{directiveName}");
         
         return factory(context, operand);
     }

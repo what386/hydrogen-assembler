@@ -43,5 +43,10 @@ public abstract class Operand
    }
 
    public abstract string Parse();
+
+   public override string ToString()
+   {
+       return $"{type}({name})";
+   }
 }
 
