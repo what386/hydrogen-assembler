@@ -44,6 +44,21 @@ public abstract class Operand
 
    public abstract string Parse();
 
+   public override bool Equals(object? obj)
+   {
+      if (obj is not Operand op) return false;
+      
+      return name == op.name &&
+             value == op.value &&
+             length == op.length &&
+             type == op.type;
+   }
+
+   public override int GetHashCode()
+   {
+       return HashCode.Combine(name, value, length, type);
+   }
+
    public override string ToString()
    {
        return $"{type}({name})";
