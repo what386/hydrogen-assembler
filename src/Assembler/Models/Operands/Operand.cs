@@ -1,7 +1,5 @@
 namespace Assembler.Models.Operands;
 
-using Utils;
-
 public abstract class Operand
 {
    public string name;
