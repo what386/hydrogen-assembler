@@ -11,9 +11,29 @@ public class Preprocessor
 
     public string[] PreprocessLines(string[] lines, string includeDir)
     {
+        lines = RemoveComments(lines);
         lines = ProcessDirectives(lines, includeDir);
         lines = AppendIncludes(lines);
         return lines;
+    }
+ 
+    public string[] RemoveComments(string[] lines)
+    {
+        var result = new List<string>(lines.Length);
+        
+        foreach (var line in lines)
+        {
+            int commentIndex = line.IndexOf(';');
+            string cleaned = commentIndex >= 0 
+                ? line.Substring(0, commentIndex) 
+                : line;
+            cleaned = cleaned.Trim();
+            
+            if (!string.IsNullOrWhiteSpace(cleaned))
+                result.Add(cleaned);
+        }
+        
+        return result.ToArray();
     }
     
     private string[] ProcessDirectives(string[] lines, string basePath)

@@ -10,31 +10,11 @@ public class Normalizer
     
     public string[] Normalize(string[] lines)
     {
-        lines = RemoveComments(lines);
         lines = ProcessLabels(lines);
         lines = AlignPages(lines);
         return lines;
     }
-    
-    public string[] RemoveComments(string[] lines)
-    {
-        var result = new List<string>(lines.Length);
-        
-        foreach (var line in lines)
-        {
-            int commentIndex = line.IndexOf(';');
-            string cleaned = commentIndex >= 0 
-                ? line.Substring(0, commentIndex) 
-                : line;
-            cleaned = cleaned.Trim();
-            
-            if (!string.IsNullOrWhiteSpace(cleaned))
-                result.Add(cleaned);
-        }
-        
-        return result.ToArray();
-    }
-    
+       
     private string[] ProcessLabels(string[] lines)
     {
         labels.Clear();
