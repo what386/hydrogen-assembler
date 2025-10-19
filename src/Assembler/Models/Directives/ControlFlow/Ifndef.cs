@@ -14,6 +14,6 @@ public class Ifndef : Directive
 
     public override void Execute()
     {
-        context.ConditionStack.Push(context.Definitions.ContainsKey(operand!));
+        context.ConditionStack.Push(!context.Definitions.ContainsKey(operand!));
     }
 }

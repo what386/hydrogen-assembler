@@ -9,8 +9,6 @@ public class Preprocessor
 {
     PreprocessorContext context = new();
 
-    private bool IsActive => context.ConditionStack.Count == 0 || context.ConditionStack.Peek();
-
     public string[] PreprocessLines(string[] lines, string includeDir)
     {
         lines = ProcessDirectives(lines, includeDir);
@@ -28,10 +26,12 @@ public class Preprocessor
 
             if (!line.StartsWith("#"))
             {
-                if (IsActive)
+                if (context.IsActive)
                 {
                     result.Add(ReplaceDefinitions(line));
+                    //result.Add(ReplaceDefinitions)
                 }
+
                 continue;
             }
 
@@ -39,7 +39,13 @@ public class Preprocessor
             {
                 Directive directive = DirectiveFactory.Create(context, line);
 
-                if (IsActive || directive.ignoresActive)
+                if (directive.needsDefinitions)
+                {
+                    var processedLine = ReplaceDefinitions(line);
+                    directive = DirectiveFactory.Create(context, processedLine);
+                }
+
+                if (context.IsActive || directive.ignoresActive)
                     directive.Execute();
             }
             catch (DirectiveException ex)

@@ -1,7 +1,11 @@
 namespace Assembler.Models.Directives.ControlFlow;
 
-public class End(PreprocessorContext context) : Directive(context, true)
+public class End : Directive
 {
+    public End(PreprocessorContext context) : base(context)
+    {
+        this.ignoresActive = true;
+    }
     // This class does nothing on its own.
     // It serves as a maker for other directives 
     // to stop gathering lines.

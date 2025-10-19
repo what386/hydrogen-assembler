@@ -10,17 +10,13 @@ public class If : Directive
             throw new ArgumentException();
 
         this.operand = operand;
+        this.needsDefinitions = true;
     }
 
     private bool EvaluateCondition(string condition)
     {
-        // Use VB-style syntax for DataTable.Compute
-        condition = condition
-            .Replace("==", "=")
-            .Replace("!=", "<>")
-            .Replace("&&", "AND")
-            .Replace("||", "OR")
-            .Replace("!", "NOT ");
+        // replace <> with != because what????
+        condition = condition.Replace("!=", "<>");
 
         try
         {
