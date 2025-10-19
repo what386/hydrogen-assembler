@@ -17,7 +17,7 @@ show_help() {
     echo "Usage: $0 <platform1> [platform2] ..."
     echo ""
     echo "Arguments:"
-    echo "  <platforms>  Space-separated list of platforms to build (required)"
+    echo "  <platforms>  Space-separated list of platforms to build"
     echo ""
     echo "Available platforms:"
     echo "  win-x64, win-x86, win-arm64"
