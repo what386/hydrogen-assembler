@@ -37,9 +37,9 @@ public class LexerTests
             new Instruction("add", new Operand[] { new Register("r1"), new Register("r2"), new Register("r3") }),
         }; 
 
-        var instructions = lexer.GetInstructions(lines);
+        var actual = lexer.GetInstructions(lines);
         
-        Assert.Equal(instructions, expected);
+        Assert.Equal(expected, actual);
     }
 
     [Fact]

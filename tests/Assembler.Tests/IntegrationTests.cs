@@ -5,23 +5,35 @@ namespace Assembler.Tests;
 
 public class IntegrationTests
 {
-    string[] instructions = 
+    [Fact]
+    public void Assembler_RawAssembly_ReturnsCorrectBinary()
     {
-        "nop",
-        "exit",
-        "adi r7 !4",
-        "nano r7 r1 r3",
-        "brt ?eq !20",
-        "jmp !2047"
-    };
+        Lexer lexer = new();
+        Parser parser = new();
 
-    string[] expectedBinary =
-    {
-        "0000000000000000",
-        "0000100100000000",
-        "1001011100000100",
-        "1101111100101011",
-        "0010100010010100",
-        "0010011111111111"
-    };
+        string[] lines = 
+        {
+            "nop",
+            "exit",
+            "adi r7, !4",
+            "nand r7, r1, r3",
+            "brt ?eq, !20",
+            "jmp !2047"
+        };
+
+        string[] expected =
+        {
+            "0000000000000000",
+            "0000100100000000",
+            "1001011100000100",
+            "1101111100101011",
+            "0010100010010100",
+            "0010011111111111"
+        }; 
+
+        var instructions = lexer.GetInstructions(lines);
+        string[] actual = parser.ParseInstructions(instructions);
+        
+        Assert.Equal(expected, actual);
+    }
 }
