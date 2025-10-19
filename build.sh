@@ -1,18 +1,14 @@
 #!/bin/bash
-
 set -e # Exit on error
-
 PROJECT_NAME="Assembler"
 OUTPUT_DIR="./publish"
 CONFIGURATION="Release"
-
 # Color output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
-
 show_help() {
     echo "Usage: $0 <platform1> [platform2] ..."
     echo ""
@@ -31,7 +27,6 @@ show_help() {
     echo "  $0 win-x64 linux-x64 osx-arm64  # Build multiple platforms"
     exit 0
 }
-
 # Check for help flag or no arguments
 if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]] || [ $# -eq 0 ]; then
     if [ $# -eq 0 ]; then
@@ -40,25 +35,75 @@ if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]] || [ $# -eq 0 ]; then
     fi
     show_help
 fi
-
 BUILD_PLATFORMS=("$@")
-
-echo -e "${GREEN}========================================${NC}"
 echo -e "${GREEN}  Building ${PROJECT_NAME}${NC}"
-echo -e "${GREEN}========================================${NC}"
-
 # Clean output directory
 if [ -d "$OUTPUT_DIR" ]; then
     echo -e "${YELLOW}Cleaning output directory...${NC}"
     rm -rf "$OUTPUT_DIR"
 fi
-
 mkdir -p "$OUTPUT_DIR"
+
+get_output_filename() {
+    local rid=$1
+    local platform=""
+    local arch=""
+    local bits=""
+    local extension=""
+
+    case $rid in
+    win-x64)
+        platform="win"
+        arch="x86"
+        bits="64"
+        extension=".exe"
+        ;;
+    win-x86)
+        platform="win"
+        arch="x86"
+        bits="32"
+        extension=".exe"
+        ;;
+    win-arm64)
+        platform="win"
+        arch="arm"
+        bits="64"
+        extension=".exe"
+        ;;
+    linux-x64)
+        platform="linux"
+        arch="x86"
+        bits="64"
+        ;;
+    linux-arm64)
+        platform="linux"
+        arch="arm"
+        bits="64"
+        ;;
+    linux-arm)
+        platform="linux"
+        arch="arm"
+        bits="32"
+        ;;
+    osx-x64)
+        platform="osx"
+        arch="x86"
+        bits="64"
+        ;;
+    osx-arm64)
+        platform="osx"
+        arch="arm"
+        bits="64"
+        ;;
+    esac
+
+    echo "${PROJECT_NAME}-${platform}_${arch}-${bits}${extension}"
+}
 
 build_platform() {
     local rid=$1
     local description=$2
-    local platform_dir="$OUTPUT_DIR/$rid"
+    local temp_dir="$OUTPUT_DIR/temp_$rid"
 
     echo ""
     echo -e "${YELLOW}Building for $description ($rid)...${NC}"
@@ -71,24 +116,35 @@ build_platform() {
         -p:PublishTrimmed=True \
         -p:TrimMode=CopyUsed \
         -p:PublishReadyToRun=True \
-        -o "${OUTPUT_DIR}/${rid}"
+        -o "$temp_dir"
 
     if [ $? -eq 0 ]; then
-        # Get file size
+        # Get source and destination filenames
         if [[ "$rid" == win-* ]]; then
-            exe_file="$platform_dir/${PROJECT_NAME}.exe"
+            src_file="$temp_dir/${PROJECT_NAME}.exe"
         else
-            exe_file="$platform_dir/${PROJECT_NAME}"
+            src_file="$temp_dir/${PROJECT_NAME}"
         fi
 
-        if [ -f "$exe_file" ]; then
-            size=$(du -h "$exe_file" | cut -f1)
-            echo -e "${GREEN}✓ Built successfully ($size)${NC}"
+        dest_file="$OUTPUT_DIR/$(get_output_filename "$rid")"
+
+        if [ -f "$src_file" ]; then
+            # Move and rename the executable
+            mv "$src_file" "$dest_file"
+
+            # Remove temporary directory
+            rm -rf "$temp_dir"
+
+            # Get file size
+            size=$(du -h "$dest_file" | cut -f1)
+            echo -e "${GREEN}✓ Built successfully ($size) -> $(basename "$dest_file")${NC}"
         else
             echo -e "${RED}✗ Build completed but executable not found${NC}"
+            rm -rf "$temp_dir"
         fi
     else
         echo -e "${RED}✗ Build failed${NC}"
+        rm -rf "$temp_dir"
         return 1
     fi
 }
@@ -107,15 +163,12 @@ get_platform_description() {
     *) echo "$rid" ;;
     esac
 }
-
 # Build selected platforms
 echo -e "${BLUE}Building platforms: ${BUILD_PLATFORMS[*]}${NC}"
-
 for rid in "${BUILD_PLATFORMS[@]}"; do
     description=$(get_platform_description "$rid")
     build_platform "$rid" "$description"
 done
-
 echo ""
 echo -e "${GREEN}========================================${NC}"
 echo -e "${GREEN}  Build Complete!${NC}"
@@ -123,6 +176,5 @@ echo -e "${GREEN}========================================${NC}"
 echo ""
 echo "Executables are located in:"
 echo ""
-
-# Show directory structure
-tree -L 2 "$OUTPUT_DIR" 2>/dev/null || find "$OUTPUT_DIR" -maxdepth 2 -type f -name "${PROJECT_NAME}*"
+# Show output files
+ls -lh "$OUTPUT_DIR"/${PROJECT_NAME}-* 2>/dev/null || echo "No executables found"
