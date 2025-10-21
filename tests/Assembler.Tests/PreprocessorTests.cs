@@ -121,4 +121,35 @@ public class PreprocessorTests
         
         Assert.Equal(expected, actual);
     }
+    
+    [Fact]
+    public void Preprocessor_RemoveComments_ProducesCleanAssembly()
+    {
+        Preprocessor preprocessor = new();
+
+        string[] lines = 
+        {
+            "add r1, r2, r3",
+            "; comment",
+            "sub r3, r2, r1",
+            "; comment 1",
+            "; comment 2",
+            "adc r2 r1 r3 ; inline comment",
+            "sbb r3 r1 r2 ; inline comment with another ':'",
+            "bsh r7 r7 r3",
+        };
+
+        string[] expected =
+        {
+            "add r1, r2, r3",
+            "sub r3, r2, r1",
+            "adc r2 r1 r3",
+            "sbb r3 r1 r2",
+            "bsh r7 r7 r3",
+        };
+
+        var actual = preprocessor.PreprocessLines(lines, "none");
+        
+        Assert.Equal(expected, actual);
+    }
 }

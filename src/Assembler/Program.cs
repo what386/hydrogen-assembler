@@ -28,7 +28,7 @@ public class Program
         try
         {
             lines = preprocessor.PreprocessLines(lines, inputFile);
-            lines = normalizer.Normalize(lines);
+            lines = normalizer.NormalizeLines(lines);
             Instruction[] instructions = lexer.GetInstructions(lines);
             binary = parser.ParseInstructions(instructions);
         }

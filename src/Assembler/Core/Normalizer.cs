@@ -8,13 +8,13 @@ public class Normalizer
 {
     private Dictionary<string, int> labels = new();
     
-    public string[] Normalize(string[] lines)
+    public string[] NormalizeLines(string[] lines)
     {
-        lines = ProcessLabels(lines);
         lines = AlignPages(lines);
+        lines = ProcessLabels(lines);
         return lines;
     }
-       
+
     private string[] ProcessLabels(string[] lines)
     {
         labels.Clear();
@@ -30,10 +30,8 @@ public class Normalizer
             if (line.EndsWith(':'))
             {
                 if (line.StartsWith("PAGE"))
-                {
                     result.Add(line);
-                    continue;
-                }
+
                 string labelName = line.TrimEnd(':');
                 labels[labelName] = lineNumber;
                 continue;
@@ -54,17 +52,27 @@ public class Normalizer
         
         return result.ToArray();
     }
-    
+
     private string ReplaceLabelReferences(string line)
     {
+        bool isBranch = line.StartsWith("br");
+
         foreach (var kvp in labels.OrderByDescending(x => x.Key.Length))
         {
             string pattern = @"\." + Regex.Escape(kvp.Key) + @"\b";
-            line = Regex.Replace(line, pattern, "!" + kvp.Value.ToString());
+
+            int value = kvp.Value;
+
+            // If branch, truncate to 6 bits
+            if (isBranch)
+                value = value & 0b111111;
+
+            line = Regex.Replace(line, pattern, "!" + value.ToString());
         }
+
         return line;
-    }
-    
+    } 
+
     private string[] AlignPages(string[] lines)
     {
         const int PageSize = 64;
