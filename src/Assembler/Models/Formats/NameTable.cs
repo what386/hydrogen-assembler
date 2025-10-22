@@ -36,11 +36,11 @@ public static class NameTable
         Settings = new Dictionary<string, string>
         {
             ["altb"] = "000", // alt branch conditions
-            ["ainc"] = "001", // auto-increment mode
-            ["lsrc"] = "010", // loop source
-            ["lcnt"] = "011", // loop count
-            ["pgsw"] = "100", // memory page swap
-            ["pgjm"] = "101", // page jump mode
+            ["pgjm"] = "001", // page jump mode
+            ["pgsw"] = "010", // manual cache page swap
+            ["umem"] = "011", // set upper memory address
+            ["loop"] = "100", // loop instruction 
+            ["sint"] = "101", // set interrupt
             ["imsk"] = "110", // interrupt mask
             ["intr"] = "111", // call interrupt
         }.ToImmutableDictionary();

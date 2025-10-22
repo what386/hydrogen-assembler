@@ -13,10 +13,10 @@ public static class AliasTable
             ["hlt"] = ("hlt", "0"),
             ["exit"] = ("hlt", "1"),
 
-            ["bra"] = ("bra", "11"),
-            ["brn"] = ("bra", "01"),
-            ["brt"] = ("bra", "10"),
-            ["brp"] = ("bra", "11"),
+            ["brn"] = ("bra", "00"),
+            ["brt"] = ("bra", "01"),
+            ["brnp"] = ("bra", "10"),
+            ["brtp"] = ("bra", "11"),
 
             ["pop"] = ("pop", "00"),
             ["peek"] = ("pop", "01"),
