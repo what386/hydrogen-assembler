@@ -44,7 +44,7 @@ public class Lexer
         foreach (var operand in operandStrings)
         {
             if (operand.Contains(' '))
-                throw new SyntaxException($"Operands must be separated by commas. Found space in operand: '{operand}'");
+                throw new SyntaxException($"Missing commas for argument: {operand}");
         }
        
         Operand[] operands = GetOperands(operandStrings);
@@ -54,17 +54,15 @@ public class Lexer
 
     private OpType GetNamedType(string operandString)
     {
-        if (operandString.Length <= 2 || operandString[0] != '[' || operandString[^1] != ']')
-            throw new SyntaxException($"Malformed named operand '{operandString}'"); 
         
-        string value = operandString[1..^1];
+        string value = operandString[1..];
 
         if (NameTable.Settings.ContainsKey(value))
             return OpType.SETTING;
         else if (NameTable.SpecialRegisters.ContainsKey(value))
             return OpType.SPECIALREG;
         else
-            throw new SyntaxException($"Invalid named operand '{operandString}'");
+            throw new SyntaxException($"Malformed named operand: {operandString}"); 
     }
 
     private OpType GetOperandType(string operandString)
@@ -77,8 +75,8 @@ public class Lexer
             'r' => OpType.REGISTER,
             '!' => OpType.IMMEDIATE,
             '?' => OpType.CONDITION,
-            '[' => GetNamedType(operandString),
-            _ => throw new SyntaxException($"Missing operand prefix for operand '{operandString}'") 
+            '$' => GetNamedType(operandString),
+            _ => throw new SyntaxException($"Missing operand prefix for operand: {operandString}") 
         };
 
         return expectedType;

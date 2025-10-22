@@ -15,7 +15,7 @@ public abstract class Operand
       char firstChar = value[0];
 
       // Check if first character is a known prefix
-      if ("!@r?.".Contains(firstChar))
+      if ("!@r?.$".Contains(firstChar))
          return value[1..];
 
       if (firstChar.Equals('['))
