@@ -35,11 +35,11 @@ public static class NameTable
 
         Settings = new Dictionary<string, string>
         {
-            ["altb"] = "000", // alt branch conditions
-            ["pgjm"] = "001", // page jump mode
-            ["pgsw"] = "010", // manual cache page swap
-            ["umem"] = "011", // set upper memory address
-            ["loop"] = "100", // loop instruction 
+            ["loop"] = "000", // loop start/end
+            ["lpct"] = "001", // loop count
+            ["cwrd"] = "010", // control word
+            ["swrd"] = "011", // status word
+            ["bank"] = "100", // bank swap
             ["sint"] = "101", // set interrupt
             ["imsk"] = "110", // interrupt mask
             ["intr"] = "111", // call interrupt
