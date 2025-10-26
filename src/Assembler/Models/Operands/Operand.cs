@@ -18,7 +18,7 @@ public abstract class Operand
       if ("!@r?.$".Contains(firstChar))
          return value[1..];
 
-      if (firstChar.Equals('['))
+      if (firstChar.Equals('"'))
          return value[1..^1];
 
       return value;
@@ -39,6 +39,7 @@ public abstract class Operand
       CONDITION,
       SETTING,
       SPECIALREG,
+      CHARACTER,
       LABEL
    }
 

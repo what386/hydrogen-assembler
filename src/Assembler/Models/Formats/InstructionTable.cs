@@ -53,7 +53,7 @@ public static class InstructionTable
             ["bsh"] = new InstructionFormat("11100", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }),
             ["bsi"] = new InstructionFormat("11101", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }),
             // ADVANCED MATH
-            ["mul"] = new InstructionFormat("11110", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }),
+            ["mdo"] = new InstructionFormat("11110", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }),
             ["btc"] = new InstructionFormat("11111", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }),
         }.ToImmutableDictionary();
     } 

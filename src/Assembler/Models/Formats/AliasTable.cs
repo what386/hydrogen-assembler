@@ -26,7 +26,7 @@ public static class AliasTable
             ["psh"] = ("psh", "00"),
             ["poke"] = ("psh", "01"),
             ["pshf"] = ("psh", "10"),
-            ["dsp"] = ("psh", "11"),
+            ["isp"] = ("psh", "11"),
 
             ["mov"] = ("mov", "00"),
             ["cpy"] = ("cpy", "01"),
