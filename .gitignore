@@ -3,3 +3,5 @@ src/Assembler/obj/
 
 tests/Assembler.Tests/bin/
 tests/Assembler.Tests/obj/
+
+publish/
