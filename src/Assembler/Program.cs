@@ -23,14 +23,14 @@ public class Program
         string? outputFile = args.Length > 1 ? args[1] : null;
 
         string[] lines = File.ReadAllLines(inputFile);
-        string[] binary;
+        string[] binaryLines;
 
         try
         {
             lines = preprocessor.PreprocessLines(lines, inputFile);
             lines = normalizer.NormalizeLines(lines);
             Instruction[] instructions = lexer.GetInstructions(lines);
-            binary = parser.ParseInstructions(instructions);
+            binaryLines = parser.ParseInstructions(instructions);
         }
         catch(DirectiveException ex)
         {
@@ -59,12 +59,24 @@ public class Program
 
         if (outputFile != null)
         {
-            File.WriteAllLines(outputFile, binary);
+            byte[] bytes = binaryLines
+                .SelectMany(binary => 
+                {
+                    ushort value = Convert.ToUInt16(binary, 2); // Convert binary string to ushort
+                    return new byte[] 
+                    { 
+                        (byte)(value >> 8),   // High byte
+                        (byte)(value & 0xFF)  // Low byte
+                    };
+                })
+                .ToArray();
+
+            File.WriteAllBytes(outputFile, bytes);
             Console.WriteLine($"Output written to {outputFile}");
         }
         else
         {
-            foreach (var line in binary)
+            foreach (var line in binaryLines)
                 Console.WriteLine(line);
         }
 

@@ -11,7 +11,7 @@ public static class AliasTable
         InstructionAliases = new Dictionary<string, (string Target, string Arg)>
         {
             ["hlt"] = ("hlt", "0"),
-            ["exit"] = ("hlt", "1"),
+            ["wait"] = ("hlt", "1"),
 
             ["brn"] = ("bra", "00"),
             ["brt"] = ("bra", "01"),

@@ -36,7 +36,7 @@ public static class InstructionTable
             ["mst"] = new InstructionFormat("01111", new[] { ADDRESS, REGISTER },               new[] { "Y03", "X08" }),
             // REGISTERS
             ["ldi"] = new InstructionFormat("10000", new[] { REGISTER, IMMEDIATE },             new[] { "X03", "Y08" }),
-            ["mov"] = new InstructionFormat("10001", new[] { REGISTER, REGISTER, CONDITION},    new[] { "X03", "Y03", "T02", "Z03" }),
+            ["mov"] = new InstructionFormat("10001", new[] { REGISTER, REGISTER, CONDITION},    new[] { "X03", "Y03", "T02", "000" }),
             // IMMEDIATE
             ["adi"] = new InstructionFormat("10010", new[] { REGISTER, IMMEDIATE },             new[] { "X03", "Y08" }),
             ["ani"] = new InstructionFormat("10011", new[] { REGISTER, IMMEDIATE },             new[] { "X03", "Y08" }),
@@ -54,7 +54,7 @@ public static class InstructionTable
             ["bsi"] = new InstructionFormat("11101", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }),
             // ADVANCED MATH
             ["mdo"] = new InstructionFormat("11110", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }),
-            ["btc"] = new InstructionFormat("11111", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }),
+            ["btc"] = new InstructionFormat("11111", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "000" }),
         }.ToImmutableDictionary();
     } 
 }
