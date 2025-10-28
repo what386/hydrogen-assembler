@@ -22,7 +22,7 @@ public static class InstructionTable
             ["jmp"] = new InstructionFormat("00100", new[] { IMMEDIATE },                       new[] { "X11" }),
             ["bra"] = new InstructionFormat("00101", new[] { CONDITION, IMMEDIATE },            new[] { "X03", "T02", "Y06" }),
             ["cal"] = new InstructionFormat("00110", new[] { IMMEDIATE },                       new[] { "X11" }),
-            ["ret"] = new InstructionFormat("00111", new Operand.Type[0],                       new[] { "00", "T01", "00000000" }),
+            ["ret"] = new InstructionFormat("00111", new Operand.Type[0],                       new[] { "000", "T02", "0000000" }),
             // INPUT / OUTPUT
             ["inp"] = new InstructionFormat("01000", new[] { REGISTER, ADDRESS },               new[] { "X03", "Y08" }),
             ["out"] = new InstructionFormat("01001", new[] { ADDRESS, REGISTER },               new[] { "Y03", "X08" }),

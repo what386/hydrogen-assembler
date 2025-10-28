@@ -18,6 +18,10 @@ public static class AliasTable
             ["brnp"] = ("bra", "10"),
             ["brtp"] = ("bra", "11"),
 
+            ["ret"] = ("ret", "00"),
+            ["iret"] = ("ret", "01"),
+            ["brk"] = ("ret", "10"), // TODO: implement
+
             ["pop"] = ("pop", "00"),
             ["peek"] = ("pop", "01"),
             ["popf"] = ("pop", "10"),
@@ -29,8 +33,7 @@ public static class AliasTable
             ["isp"] = ("psh", "11"),
 
             ["mov"] = ("mov", "00"),
-            ["cpy"] = ("cpy", "01"),
-            ["swp"] = ("swp", "10"),
+            ["cpy"] = ("cpy", "01"), // TODO: implement
 
             ["add"] = ("add", "00"),
             ["adc"] = ("add", "01"),
