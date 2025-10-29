@@ -7,7 +7,9 @@ loop:
     nop
     jmp .loop
 kb_int:
+    psh r1, !0
     inp r1, @0
     out @0, r1
+    pop r1, !0
     iret
 
