@@ -5,7 +5,7 @@ public static class BaseConverter
     public static int ToInteger(string input)
     {
         if (input.Length < 2 || !input.StartsWith("0"))
-            return Convert.ToInt32(input, 10);  // Decimal
+            return int.Parse(input);  // Decimal
         
         string prefix = input[..2].ToLower();
         string number = input[2..];

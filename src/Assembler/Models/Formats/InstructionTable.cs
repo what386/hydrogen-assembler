@@ -13,47 +13,38 @@ public static class InstructionTable
     {
         Formats = new Dictionary<string, InstructionFormat>
         {
-            // SYSTEM
-            ["nop"] = new InstructionFormat("00000", new Operand.Type[0],                       new[] { "00000000000" }),
-            ["hlt"] = new InstructionFormat("00001", new Operand.Type[0],                       new[] { "00", "T01", "00000000" }),
-            ["sys"] = new InstructionFormat("00010", new[] { SETTING, IMMEDIATE },              new[] { "X03", "Y08" }),
-            // CONTROL FLOW
-            ["cli"] = new InstructionFormat("00011", new[] { REGISTER, CONDITION, IMMEDIATE },  new[] { "X03", "Y03", "Z05" }),
-            ["jmp"] = new InstructionFormat("00100", new[] { IMMEDIATE },                       new[] { "X11" }),
+            //OP                            OPCODE           X,        Y,        Z                       MASK
+            ["hlt"] = new InstructionFormat("00000", new[] { IMMEDIATE },                       new[] { "T02", "X09" }), // SYSTEM
+            ["sys"] = new InstructionFormat("00001", new[] { SETTING, IMMEDIATE },              new[] { "X03", "Y08" }),
+            ["inp"] = new InstructionFormat("00010", new[] { REGISTER, ADDRESS },               new[] { "X03", "Y08" }), // IO
+            ["out"] = new InstructionFormat("00011", new[] { ADDRESS, REGISTER },               new[] { "Y03", "X08" }),
+            ["jmp"] = new InstructionFormat("00100", new[] { IMMEDIATE },                       new[] { "X11" }), // CTRL FLOW
             ["bra"] = new InstructionFormat("00101", new[] { CONDITION, IMMEDIATE },            new[] { "X03", "T02", "Y06" }),
             ["cal"] = new InstructionFormat("00110", new[] { IMMEDIATE },                       new[] { "X11" }),
-            ["ret"] = new InstructionFormat("00111", new Operand.Type[0],                       new[] { "0", "T02", "00000000" }),
-            // INPUT / OUTPUT
-            ["inp"] = new InstructionFormat("01000", new[] { REGISTER, ADDRESS },               new[] { "X03", "Y08" }),
-            ["out"] = new InstructionFormat("01001", new[] { ADDRESS, REGISTER },               new[] { "Y03", "X08" }),
-            // SPECIAL REGISTERS
-            ["sld"] = new InstructionFormat("01010", new[] { REGISTER, REGISTER },              new[] { "X03", "Y03", "00000" }),
-            ["sst"] = new InstructionFormat("01011", new[] { REGISTER, REGISTER },              new[] { "Y03", "X03", "00000" }),
-            // MEMORY
-            ["pop"] = new InstructionFormat("01100", new[] { REGISTER, IMMEDIATE},              new[] { "X03", "T02", "Y06" }),
-            ["psh"] = new InstructionFormat("01101", new[] { REGISTER, IMMEDIATE},              new[] { "X03", "T02", "Y06" }),
-            ["mld"] = new InstructionFormat("01110", new[] { REGISTER, ADDRESS },               new[] { "X03", "Y08" }),
-            ["mst"] = new InstructionFormat("01111", new[] { ADDRESS, REGISTER },               new[] { "Y03", "X08" }),
-            // REGISTERS
-            ["ldi"] = new InstructionFormat("10000", new[] { REGISTER, IMMEDIATE },             new[] { "X03", "Y08" }),
-            ["mov"] = new InstructionFormat("10001", new[] { REGISTER, REGISTER, CONDITION},    new[] { "X03", "Y03", "T02", "000" }),
-            // IMMEDIATE
-            ["adi"] = new InstructionFormat("10010", new[] { REGISTER, IMMEDIATE },             new[] { "X03", "Y08" }),
+            ["ret"] = new InstructionFormat("00111", new Operand.Type[0],                       new[] { "T02", "000000000" }),
+            ["prg"] = new InstructionFormat("01000", new[] { REGISTER, ADDRESS },               new[] { "X03", "Y08" }), // MEMORY
+            ["blt"] = new InstructionFormat("01001", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }),
+            ["pop"] = new InstructionFormat("01010", new[] { REGISTER, OFFSET },                new[] { "X03", "T02", "Y06" }),
+            ["psh"] = new InstructionFormat("01011", new[] { REGISTER, OFFSET },                new[] { "X03", "T02", "Y06" }),
+            ["mld"] = new InstructionFormat("01100", new[] { REGISTER, ADDRESS },               new[] { "X03", "Y08" }),
+            ["mst"] = new InstructionFormat("01101", new[] { ADDRESS, REGISTER },               new[] { "Y03", "X08" }),
+            ["mli"] = new InstructionFormat("01110", new[] { REGISTER, REGISTER, OFFSET },      new[] { "X03", "Y03" }),
+            ["msi"] = new InstructionFormat("01111", new[] { REGISTER, REGISTER, OFFSET },      new[] { "X03", "Y03" }),
+            ["ldi"] = new InstructionFormat("10000", new[] { REGISTER, IMMEDIATE },             new[] { "X03", "Y08" }), // REGISTERS
+            ["mov"] = new InstructionFormat("10001", new[] { REGISTER, REGISTER, CONDITION},    new[] { "X03", "Y03", "T02", "Z03" }),
+            ["adi"] = new InstructionFormat("10010", new[] { REGISTER, IMMEDIATE },             new[] { "X03", "Y08" }), // IMMEDIATE
             ["ani"] = new InstructionFormat("10011", new[] { REGISTER, IMMEDIATE },             new[] { "X03", "Y08" }),
             ["ori"] = new InstructionFormat("10100", new[] { REGISTER, IMMEDIATE },             new[] { "X03", "Y08" }),
             ["xri"] = new InstructionFormat("10101", new[] { REGISTER, IMMEDIATE },             new[] { "X03", "Y08" }),
             ["cpi"] = new InstructionFormat("10110", new[] { REGISTER, IMMEDIATE },             new[] { "X03", "Y08" }),
             ["tsi"] = new InstructionFormat("10111", new[] { REGISTER, IMMEDIATE },             new[] { "X03", "Y08" }),
-            // ARITHMETIC
-            ["add"] = new InstructionFormat("11000", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }),
+            ["add"] = new InstructionFormat("11000", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }), // ARITHMETIC
             ["sub"] = new InstructionFormat("11001", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }),
-            // LOGIC
-            ["bit"] = new InstructionFormat("11010", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }),
+            ["bit"] = new InstructionFormat("11010", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }), // LOGIC
             ["bnt"] = new InstructionFormat("11011", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }),
             ["bsh"] = new InstructionFormat("11100", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }),
             ["bsi"] = new InstructionFormat("11101", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }),
-            // ADVANCED MATH
-            ["mdo"] = new InstructionFormat("11110", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }),
+            ["mdo"] = new InstructionFormat("11110", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "Z03" }), // COMPLEX MATH
             ["btc"] = new InstructionFormat("11111", new[] { REGISTER, REGISTER, REGISTER },    new[] { "X03", "Y03", "T02", "000" }),
         }.ToImmutableDictionary();
     } 

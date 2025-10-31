@@ -10,8 +10,10 @@ public static class AliasTable
     {
         InstructionAliases = new Dictionary<string, (string Target, string Arg)>
         {
-            ["hlt"] = ("hlt", "0"),
-            ["wait"] = ("hlt", "1"),
+            ["nop"] = ("hlt", "00"),
+            ["yld"] = ("hlt", "01"),
+            ["wait"] = ("hlt", "10"),
+            ["hlt"] = ("hlt", "11"),
 
             ["brn"] = ("bra", "00"),
             ["brt"] = ("bra", "01"),
@@ -19,8 +21,9 @@ public static class AliasTable
             ["brtp"] = ("bra", "11"),
 
             ["ret"] = ("ret", "00"),
-            ["iret"] = ("ret", "01"),
-            ["brk"] = ("ret", "10"), // TODO: implement
+            ["skp"] = ("ret", "01"),
+            ["brk"] = ("ret", "10"),
+            ["iret"] = ("ret", "11"),
 
             ["pop"] = ("pop", "00"),
             ["peek"] = ("pop", "01"),
@@ -33,7 +36,9 @@ public static class AliasTable
             ["isp"] = ("psh", "11"),
 
             ["mov"] = ("mov", "00"),
-            ["cpy"] = ("cpy", "01"), // TODO: implement
+            ["cpy"] = ("mov", "01"),
+            ["swp"] = ("mov", "10"),
+            ["nbl"] = ("mov", "11"),
 
             ["add"] = ("add", "00"),
             ["adc"] = ("add", "01"),

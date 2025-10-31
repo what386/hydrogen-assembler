@@ -7,7 +7,6 @@ using Assembler.Models.Formats;
 using Assembler.Models.Operands;
 using OpType = Assembler.Models.Operands.Operand.Type;
 
-
 public class Lexer
 {
     public Instruction[] GetInstructions(string[] lines)
@@ -59,8 +58,6 @@ public class Lexer
 
         if (NameTable.Settings.ContainsKey(value))
             return OpType.SETTING;
-        else if (NameTable.SpecialRegisters.ContainsKey(value))
-            return OpType.SPECIALREG;
         else
             throw new SyntaxException($"Malformed named operand: {operandString}"); 
     }
@@ -74,6 +71,8 @@ public class Lexer
             '@' => OpType.ADDRESS,
             'r' => OpType.REGISTER,
             '!' => OpType.IMMEDIATE,
+            '-' => OpType.OFFSET,
+            '+' => OpType.OFFSET,
             '?' => OpType.CONDITION,
             '$' => GetNamedType(operandString),
             '"' => OpType.CHARACTER,
@@ -89,6 +88,7 @@ public class Lexer
         {
             // imm defaults to "0" length if not provided
             OpType.IMMEDIATE => new Immediate(value),
+            OpType.OFFSET => new Offset(value),
             OpType.ADDRESS => new Address(value),
             OpType.CONDITION => new Condition(value),
             OpType.REGISTER => new Register(value),

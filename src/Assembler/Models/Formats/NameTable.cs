@@ -6,7 +6,6 @@ public static class NameTable
 {
     public static ImmutableDictionary<string, string> BranchConditions{ get; }
     public static ImmutableDictionary<string, string> Settings { get; }
-    public static ImmutableDictionary<string, string> SpecialRegisters{ get; }
 
     static NameTable()
     {
@@ -35,27 +34,14 @@ public static class NameTable
 
         Settings = new Dictionary<string, string>
         {
-            ["loop"] = "000", // loop start/end
-            ["lpct"] = "001", // loop count
-            ["cwrd"] = "010", // control word
-            ["swrd"] = "011", // status word
+            ["ctrl"] = "000", // control word
+            ["stat"] = "001", // status word
+            ["tmrl"] = "010", // timer lower
+            ["tmru"] = "011", // timer upper
             ["bank"] = "100", // bank swap
             ["sint"] = "101", // set interrupt
             ["imsk"] = "110", // interrupt mask
             ["intr"] = "111", // call interrupt
         }.ToImmutableDictionary();
-        
-        SpecialRegisters = new Dictionary<string, string>
-        {
-            ["ap"] = "000", // address pointer
-            ["sp"] = "001", // stack pointer
-            ["sw"] = "010", // status word
-            ["cw"] = "011", // control word 
-            ["lp"] = "100", // loop pointer
-            ["bo"] = "101", // branch offset
-            ["pcl"] = "110", // program counter low
-            ["pch"] = "111", // program counter high
-        }.ToImmutableDictionary();
     }
-
 }

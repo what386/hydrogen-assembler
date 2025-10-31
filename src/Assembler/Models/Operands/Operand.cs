@@ -15,6 +15,7 @@ public abstract class Operand
       char firstChar = value[0];
 
       // Check if first character is a known prefix
+      // +- are excluded as they are part of number
       if ("!@r?.$".Contains(firstChar))
          return value[1..];
 
@@ -35,6 +36,7 @@ public abstract class Operand
    public enum Type{
       REGISTER,
       IMMEDIATE,
+      OFFSET,
       ADDRESS,
       CONDITION,
       SETTING,
