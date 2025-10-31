@@ -40,9 +40,7 @@ public abstract class Operand
       ADDRESS,
       CONDITION,
       SETTING,
-      SPECIALREG,
-      CHARACTER,
-      LABEL
+      CHARACTER
    }
 
    public abstract string Parse();

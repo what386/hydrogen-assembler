@@ -13,8 +13,9 @@ public class IntegrationTests
 
         string[] lines = 
         {
-            "nop",
-            "exit",
+            // TODO: add optional parameters
+            "nop !0",
+            "hlt !0",
             "adi r7, !4",
             "nand r7, r1, r3",
             "brt ?eq, !20",
@@ -24,10 +25,10 @@ public class IntegrationTests
         string[] expected =
         {
             "0000000000000000",
-            "0000100100000000",
+            "0000011000000000",
             "1001011100000100",
             "1101111100101011",
-            "0010100010010100",
+            "0010100001010100",
             "0010011111111111"
         }; 
 

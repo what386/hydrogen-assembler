@@ -45,7 +45,7 @@ public class OperandTests
     [Fact]
     public void Setting_UnknownSetting_ThrowsSemanticException()
     {
-        var setting = new Setting("[err]");
+        var setting = new Setting("$err");
         
         Assert.Throws<SemanticException>(() => (setting.Parse()));
     }

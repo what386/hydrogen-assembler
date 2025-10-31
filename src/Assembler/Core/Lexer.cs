@@ -93,7 +93,6 @@ public class Lexer
             OpType.CONDITION => new Condition(value),
             OpType.REGISTER => new Register(value),
             OpType.SETTING => new Setting(value),
-            OpType.SPECIALREG => new SpecialRegister(value),
             OpType.CHARACTER => new Character(value),
             _ => throw new AssemblerException($"Invalid operand type in creation of new operand: {type}")
         };
