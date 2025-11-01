@@ -6,6 +6,9 @@ public static class NameTable
 {
     public static ImmutableDictionary<string, string> BranchConditions{ get; }
     public static ImmutableDictionary<string, string> Settings { get; }
+    public static ImmutableDictionary<string, string> Commands { get; }
+
+    const string UNUSED = "";
 
     static NameTable()
     {
@@ -32,16 +35,29 @@ public static class NameTable
             ["pl"] = "111", // plus / positive (n=0)
         }.ToImmutableDictionary();
 
+        Commands = new Dictionary<string, string>
+        {
+            ["noop"] = "000", // no-op
+            ["halt"] = "001", // halt
+            ["word"] = "010", // status / ctrl word
+            ["pc"] = "011", // program counter
+            ["intv"] = "100", // interrupt vector
+            [UNUSED] = "101",
+            ["drq"] = "110", // dma request
+            ["irq"] = "111", // interrupt request
+        }.ToImmutableDictionary();
+
         Settings = new Dictionary<string, string>
         {
             ["ctrl"] = "000", // control word
             ["stat"] = "001", // status word
-            ["tmrl"] = "010", // timer lower
-            ["tmru"] = "011", // timer upper
-            ["bank"] = "100", // bank swap
-            ["sint"] = "101", // set interrupt
-            ["imsk"] = "110", // interrupt mask
-            ["intr"] = "111", // call interrupt
+            [UNUSED] = "010",
+            ["bank"] = "011", // active bank
+            [UNUSED] = "100",
+            [UNUSED] = "101",
+            ["dmam"] = "110", // dma mask
+            ["intm"] = "111", // interrupt mask
         }.ToImmutableDictionary();
+
     }
 }

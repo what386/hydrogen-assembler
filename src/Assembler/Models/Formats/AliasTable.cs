@@ -20,10 +20,14 @@ public static class AliasTable
             ["brnp"] = ("bra", "10"),
             ["brtp"] = ("bra", "11"),
 
+
             ["ret"] = ("ret", "00"),
-            ["skp"] = ("ret", "01"),
-            ["brk"] = ("ret", "10"),
+            ["brk"] = ("ret", "01"),
             ["iret"] = ("ret", "11"),
+
+            ["rets"] = ("rets", "00"),
+            ["brks"] = ("rets", "01"),
+            ["irets"] = ("rets", "11"),
 
             ["pop"] = ("pop", "00"),
             ["peek"] = ("pop", "01"),

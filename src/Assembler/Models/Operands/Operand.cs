@@ -39,6 +39,7 @@ public abstract class Operand
       OFFSET,
       ADDRESS,
       CONDITION,
+      COMMAND,
       SETTING,
       CHARACTER
    }

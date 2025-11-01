@@ -63,10 +63,14 @@ public class Parser
 
     private InstructionFormat GetInstructionFormat(string mnemonic)
     {
-        if (!InstructionTable.Formats.ContainsKey(mnemonic))
-            throw new SemanticException($"Unknown instruction: {mnemonic}");
+        if (InstructionTable.Formats.ContainsKey(mnemonic))
+            return InstructionTable.Formats[mnemonic];
+
+        if (PseudoInstTable.Formats.ContainsKey(mnemonic))
+            return PseudoInstTable.Formats[mnemonic];
         
-        return InstructionTable.Formats[mnemonic];
+        throw new SemanticException($"Unknown instruction: {mnemonic}");
+        
     }
 
     private void SetOperandLengths(Operand[] operands, int[] operandLengths)
