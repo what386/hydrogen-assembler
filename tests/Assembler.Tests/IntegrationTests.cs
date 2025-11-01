@@ -14,9 +14,9 @@ public class IntegrationTests
         string[] lines = 
         {
             // TODO: add optional parameters
-            "nop !0",
-            "hlt !0",
-            "adi r7, !4",
+            "nop",
+            "hlt",
+            "addi r7, !4",
             "nand r7, r1, r3",
             "brt ?eq, !20",
             "jmp !2047"
