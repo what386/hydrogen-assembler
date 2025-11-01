@@ -20,6 +20,7 @@ public class DirectiveFactory
 
         // definitions
         { "define", (context, operand) => new Define(context, operand) },
+        { "undef", (context, operand) => new Undef(context, operand) },
 
         // transforms
         { "include", (context, operand) => new Include(context, operand) },

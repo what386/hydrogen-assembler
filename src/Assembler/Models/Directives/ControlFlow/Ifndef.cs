@@ -1,5 +1,7 @@
 namespace Assembler.Models.Directives.ControlFlow;
 
+using Assembler.Exceptions;
+
 public class Ifndef : Directive
 {
     string operand;
@@ -7,7 +9,7 @@ public class Ifndef : Directive
     public Ifndef(PreprocessorContext context, string operand) : base(context)
     {
         if (String.IsNullOrEmpty(operand))
-            throw new ArgumentException();
+            throw new DirectiveException("Ifdef argument cannot be empty");
 
         this.operand = operand;
     }

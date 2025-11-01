@@ -1,5 +1,7 @@
 namespace Assembler.Models.Directives.Definitions;
 
+using Assembler.Exceptions;
+
 public class Define : Directive
 {
     string operand;
@@ -7,7 +9,7 @@ public class Define : Directive
     public Define(PreprocessorContext context, string operand) : base(context)
     {
         if (String.IsNullOrEmpty(operand))
-            throw new ArgumentException();
+            throw new DirectiveException("Definition argument cannot be empty");
 
         this.operand = operand;
     }
@@ -19,6 +21,6 @@ public class Define : Directive
         if (parts.Length == 2)
             context.Definitions[parts[0]] = parts[1];
         else
-            throw new ArgumentException();
+            throw new DirectiveException($"Invalid definition: {operand}");
     }
 }

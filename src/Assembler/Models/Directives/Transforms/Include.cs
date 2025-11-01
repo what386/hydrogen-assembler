@@ -1,5 +1,7 @@
 namespace Assembler.Models.Directives.Transforms;
 
+using Assembler.Exceptions;
+
 public class Include : Directive
 {
     string operand;
@@ -7,7 +9,7 @@ public class Include : Directive
     public Include(PreprocessorContext context, string operand) : base(context)
     {
         if (String.IsNullOrEmpty(operand))
-            throw new ArgumentException();
+            throw new DirectiveException("Include argument cannot be empty");
 
         this.operand = operand;
     }
@@ -16,6 +18,9 @@ public class Include : Directive
     {
         var file = operand.Trim('"');
         var fullPath = Path.Combine(context.BasePath, file);
+
+        if (!File.Exists(fullPath))
+            throw new DirectiveException($"Included file does not exist: {fullPath}");
        
         if (!context.IncludedFiles.Contains(fullPath))
         {

@@ -1,5 +1,7 @@
 namespace Assembler.Models.Directives.ControlFlow;
 
+using Assembler.Exceptions;
+
 public class If : Directive
 {
     string operand;
@@ -15,7 +17,6 @@ public class If : Directive
 
     private bool EvaluateCondition(string condition)
     {
-        // replace <> with != because what????
         condition = condition.Replace("!=", "<>");
 
         try
@@ -26,7 +27,7 @@ public class If : Directive
         }
         catch
         {
-            throw new ArgumentException();
+            throw new DirectiveException($"Invalid conditional: {condition}");
         }
     }
 

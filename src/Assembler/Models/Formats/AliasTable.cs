@@ -35,10 +35,23 @@ public static class AliasTable
             ["pshf"] = ("psh", "10"),
             ["isp"] = ("psh", "11"),
 
+            ["instr"] = ("inst", "00"),
+            ["instw"] = ("inst", "01"),
+
+            ["blit-cpy"] = ("blit", "00"),
+            ["blit-or"] = ("blit", "01"),
+            ["blit-and"] = ("blit", "10"),
+            ["blit-xor"] = ("blit", "11"),
+
             ["mov"] = ("mov", "00"),
             ["cpy"] = ("mov", "01"),
             ["swp"] = ("mov", "10"),
             ["nbl"] = ("mov", "11"),
+
+            ["cmov"] = ("cmov", "00"),
+            ["ccpy"] = ("cmov", "01"),
+            ["cswp"] = ("cmov", "10"),
+            ["cnbl"] = ("cmov", "11"),
 
             ["add"] = ("add", "00"),
             ["adc"] = ("add", "01"),
